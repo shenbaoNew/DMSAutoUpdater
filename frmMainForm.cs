@@ -97,25 +97,27 @@ namespace DMSAutoUpdater {
 
         public void UnZipDapPackageCallBack(object sender, EventArgs e) {
             try {
-                string sourcePath = Path.Combine(UpgradeContext.TempDirectory, "DMS");
-                string desPath = Environment.CurrentDirectory;
                 //更新程序
-                Utils.WriteLog(UpgradeContext.LogFullName, "正在更新程序...");
-                Utils.CopyDirectory(sourcePath, desPath, true);
-                //还原配置文件
-                Utils.WriteLog(UpgradeContext.LogFullName, "还原配置文件...");
-                this.RestoreConfigFile();
+                this.UpdateNewProgram();
+                //还原配置文件(暂时不还原了)
+                //this.RestoreConfigFile();
                 //删除解压缩临时文件
-                Utils.WriteLog(UpgradeContext.LogFullName, "删除临时文件...");
                 this.DeleteUpgradePackage();
                 //启动启动DMS
-                Utils.WriteLog(UpgradeContext.LogFullName, "启动DMS...");
                 this.StartDms();
                 Utils.WriteLog(UpgradeContext.LogFullName, "升级完毕..." + Environment.NewLine + Environment.NewLine);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "升级出错：" + ex.Message);
                 Utils.WriteLog(UpgradeContext.LogFullName, "升级出错", ex);
             }
+        }
+
+        private void UpdateNewProgram() {
+            string sourcePath = Path.Combine(UpgradeContext.TempDirectory, "DMS");
+            string desPath = Environment.CurrentDirectory;
+
+            Utils.WriteLog(UpgradeContext.LogFullName, "正在更新程序...");
+            Utils.CopyDirectory(sourcePath, desPath, true);
         }
 
         private void BulkConfigFile() {
@@ -131,6 +133,7 @@ namespace DMSAutoUpdater {
 
         private void RestoreConfigFile() {
             try {
+                Utils.WriteLog(UpgradeContext.LogFullName, "还原配置文件...");
                 string sourceFile = Path.Combine(UpgradeContext.TempDirectory, "menu.xml");
                 string desFile = Path.Combine(Environment.CurrentDirectory, "menu.xml");
                 File.Copy(sourceFile, desFile, true);
@@ -141,6 +144,7 @@ namespace DMSAutoUpdater {
 
         private void DeleteUpgradePackage() {
             try {
+                Utils.WriteLog(UpgradeContext.LogFullName, "删除临时文件...");
                 string path = Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName,
                      UpgradeContext.UpgradeDirectoryName, "DMS");
                 Directory.Delete(path, true);
@@ -150,6 +154,7 @@ namespace DMSAutoUpdater {
         }
 
         private void StartDms() {
+            Utils.WriteLog(UpgradeContext.LogFullName, "启动DMS...");
             timer.Enabled = true;
         }
 
