@@ -65,6 +65,7 @@
             this.btnViewLog.TabIndex = 2;
             this.btnViewLog.Text = "查看日志";
             this.btnViewLog.UseVisualStyleBackColor = true;
+            this.btnViewLog.Click += new System.EventHandler(this.btnViewLog_Click);
             // 
             // frmMainForm
             // 
