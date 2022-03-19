@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,25 +14,46 @@ namespace DMSAutoUpdater {
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
-            CreateTempDirectory();
-            Application.ThreadException += Application_ThreadException;
-            if (args.Length > 0) {
-                UpgradeContext.NewVersion = args[0];
-            } else {
-                UpgradeContext.NewVersion = NewVersion();
+            Process instance = RunningInstance();
+            if (instance == null) {
+                CreateTempDirectory();
+                Application.ThreadException += Application_ThreadException;
+                if (args.Length > 0) {
+                    UpgradeContext.NewVersion = args[0];
+                } else {
+                    UpgradeContext.NewVersion = NewVersion();
+                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                if (string.IsNullOrEmpty(UpgradeContext.NewVersion)) {
+                    MessageBox.Show("未检测到更新包，即将退出...");
+                    return;
+                }
+                if (!CheckNeedUpgrade(UpgradeContext.NewVersion)) {
+                    MessageBox.Show("当前程序已是最新版本，无需更新...");
+                    return;
+                }
+                Utils.WriteLog(UpgradeContext.LogFullName, "开始升级...");
+                Application.Run(new frmMainForm());
             }
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            if (string.IsNullOrEmpty(UpgradeContext.NewVersion)) {
-                MessageBox.Show("未检测到更新包，即将退出...");
-                return;
+        }
+
+        private static Process RunningInstance() {
+            Process current = Process.GetCurrentProcess();
+            Process[] processes = Process.GetProcessesByName(current.ProcessName);
+            //Loop through the running processes in with the same name 
+            foreach (Process process in processes) {
+                //Ignore the current process 
+                if (process.Id != current.Id) {
+                    //Make sure that the process is running from the exe file. 
+                    if (Assembly.GetExecutingAssembly().Location.Replace("/", "\\") == current.MainModule.FileName) {
+                        //Return the other process instance. 
+                        return process;
+                    }
+                }
             }
-            if (!CheckNeedUpgrade(UpgradeContext.NewVersion)) {
-                MessageBox.Show("当前程序已是最新版本，无需更新...");
-                return;
-            }
-            Utils.WriteLog(UpgradeContext.LogFullName, "开始升级...");
-            Application.Run(new frmMainForm());
+            //No other instance was found, return null. 
+            return null;
         }
 
         private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e) {

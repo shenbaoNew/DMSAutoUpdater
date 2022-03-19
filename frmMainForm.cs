@@ -49,6 +49,7 @@ namespace DMSAutoUpdater {
                 Utils.WriteLog(UpgradeContext.LogFullName, "更新包下载完毕...");
                 this.Invoke(new DownLoadFile(this.DowloadDms), 0, true);
             } catch (Exception ex) {
+                MessageBox.Show("更新出现错误：" + ex.Message);
                 Utils.WriteLog(UpgradeContext.LogFullName, "下载更新包出错" + ex.Message + Environment.NewLine + ex.StackTrace);
             } finally {
                 if (ftpStream != null) {
@@ -195,6 +196,10 @@ namespace DMSAutoUpdater {
 
         private void frmMainForm_FormClosed(object sender, FormClosedEventArgs e) {
             timer.Enabled = false;
+        }
+
+        private void btnViewLog_Click(object sender, EventArgs e) {
+            Process.Start("NOTEPAD.exe", UpgradeContext.LogFullName);
         }
     }
 }

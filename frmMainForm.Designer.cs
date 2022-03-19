@@ -28,6 +28,7 @@
             this.lblInfo = new System.Windows.Forms.Label();
             this.lblUpgrade = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.btnViewLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblInfo
@@ -56,11 +57,21 @@
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // btnViewLog
+            // 
+            this.btnViewLog.Location = new System.Drawing.Point(855, 140);
+            this.btnViewLog.Name = "btnViewLog";
+            this.btnViewLog.Size = new System.Drawing.Size(144, 46);
+            this.btnViewLog.TabIndex = 2;
+            this.btnViewLog.Text = "查看日志";
+            this.btnViewLog.UseVisualStyleBackColor = true;
+            // 
             // frmMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1011, 184);
+            this.Controls.Add(this.btnViewLog);
             this.Controls.Add(this.lblUpgrade);
             this.Controls.Add(this.lblInfo);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -79,6 +90,7 @@
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Label lblUpgrade;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Button btnViewLog;
     }
 }
 
