@@ -13,7 +13,6 @@ namespace DMSAutoUpdater {
         [STAThread]
         static void Main(string[] args) {
             CreateTempDirectory();
-            Utils.WriteLog(UpgradeContext.LogFullName, "开始升级...");
             Application.ThreadException += Application_ThreadException;
             if (args.Length > 0) {
                 UpgradeContext.NewVersion = args[0];
@@ -26,6 +25,11 @@ namespace DMSAutoUpdater {
                 MessageBox.Show("未检测到更新包，即将退出...");
                 return;
             }
+            if (!CheckNeedUpgrade(UpgradeContext.NewVersion)) {
+                MessageBox.Show("当前程序已是最新版本，无需更新...");
+                return;
+            }
+            Utils.WriteLog(UpgradeContext.LogFullName, "开始升级...");
             Application.Run(new frmMainForm());
         }
 
@@ -33,6 +37,17 @@ namespace DMSAutoUpdater {
             Utils.WriteLog(UpgradeContext.LogFullName, "程序运行错误", e.Exception);
         }
 
+
+        private static bool CheckNeedUpgrade(string newVersion) {
+            try {
+                System.Diagnostics.FileVersionInfo fv = System.Diagnostics.FileVersionInfo.GetVersionInfo("DMS.exe");
+                if (fv.FileVersion.Equals(newVersion)) {
+                    return false;
+                }
+            } catch (Exception ex) {
+            }
+            return true;
+        }
         public static void CreateTempDirectory() {
             UpgradeContext.TempDirectory = Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName,
                 UpgradeContext.UpgradeDirectoryName);

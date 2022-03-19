@@ -111,7 +111,7 @@ namespace DMSAutoUpdater {
                 //启动启动DMS
                 Utils.WriteLog(UpgradeContext.LogFullName, "启动DMS...");
                 this.StartDms();
-                Utils.WriteLog(UpgradeContext.LogFullName, "升级完毕...");
+                Utils.WriteLog(UpgradeContext.LogFullName, "升级完毕..." + Environment.NewLine + Environment.NewLine);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "升级出错：" + ex.Message);
                 Utils.WriteLog(UpgradeContext.LogFullName, "升级出错", ex);
