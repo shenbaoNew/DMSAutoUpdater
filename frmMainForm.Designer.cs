@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMainForm));
             this.lblInfo = new System.Windows.Forms.Label();
             this.lblUpgrade = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
@@ -62,6 +63,7 @@
             this.ClientSize = new System.Drawing.Size(1011, 184);
             this.Controls.Add(this.lblUpgrade);
             this.Controls.Add(this.lblInfo);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1039, 263);
             this.MinimumSize = new System.Drawing.Size(1039, 263);
             this.Name = "frmMainForm";
