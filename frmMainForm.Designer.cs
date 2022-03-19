@@ -34,9 +34,9 @@
             // 
             this.lblInfo.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblInfo.ForeColor = System.Drawing.Color.Red;
-            this.lblInfo.Location = new System.Drawing.Point(104, 47);
+            this.lblInfo.Location = new System.Drawing.Point(86, 47);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(835, 45);
+            this.lblInfo.Size = new System.Drawing.Size(895, 45);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "正在下载更新包，已完成 0 Byte......";
             // 
@@ -44,7 +44,7 @@
             // 
             this.lblUpgrade.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblUpgrade.ForeColor = System.Drawing.Color.Red;
-            this.lblUpgrade.Location = new System.Drawing.Point(104, 92);
+            this.lblUpgrade.Location = new System.Drawing.Point(86, 92);
             this.lblUpgrade.Name = "lblUpgrade";
             this.lblUpgrade.Size = new System.Drawing.Size(835, 45);
             this.lblUpgrade.TabIndex = 1;

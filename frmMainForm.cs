@@ -44,7 +44,7 @@ namespace DMSAutoUpdater {
 
                 while ((readCount = ftpStream.Read(buffer, 0, bufferSize)) > 0) {
                     outputStream.Write(buffer, 0, readCount);
-                    this.Invoke(new DownLoadFile(this.DowloadDms), buffer.Length, false);
+                    this.Invoke(new DownLoadFile(this.DowloadDms), readCount, false);
                 }
                 Utils.WriteLog(UpgradeContext.LogFullName, "更新包下载完毕...");
                 this.Invoke(new DownLoadFile(this.DowloadDms), 0, true);
@@ -63,6 +63,11 @@ namespace DMSAutoUpdater {
             }
         }
 
+        private void InitFileSize() {
+            string ftpFileName = string.Format("ftp://{0}/", UpgradeContext.DmsFtpServer) + UpgradeContext.FileName;
+            fileTotalSize = Utils.GetFtpFileSize(UpgradeContext.DmsFtpUser, UpgradeContext.DmsFtpPwd, ftpFileName) / 1024;
+        }
+
         public string GetLocalFileName() {
             string path = UpgradeContext.TempDirectory;
             string fileName = Path.Combine(path, UpgradeContext.FileName);
@@ -70,11 +75,13 @@ namespace DMSAutoUpdater {
         }
 
         private int size = 0;
+        private int fileTotalSize = 0;
         public void DowloadDms(int size, bool complete) {
-            this.size = this.size + size / 1000;
-            string msg = string.Format("正在下载更新包，已完成 {0} KB......", this.size.ToString("#,##0"));
+            this.size = this.size + size / 1024;
+            string msg = string.Format("正在下载更新包，共 {0} KB，已完成 {1} KB......", fileTotalSize.ToString("#,##0")
+                , this.size.ToString("#,##0"));
             if (complete) {
-                msg = string.Format("更新包下载完毕，共 {0} Byte......", this.size.ToString("#,##0"));
+                msg = string.Format("更新包下载完毕，共 {0} KB......", fileTotalSize.ToString("#,##0"));
             }
             this.lblInfo.Text = msg;
             if (complete) {
@@ -172,6 +179,7 @@ namespace DMSAutoUpdater {
         }
 
         private void frmMainForm_Load(object sender, EventArgs e) {
+            this.InitFileSize();
             this.StartDownLoad();
         }
 

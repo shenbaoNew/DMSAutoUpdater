@@ -83,6 +83,28 @@ namespace DMSAutoUpdater {
             }
         }
 
+        /// <summary>
+        /// 获取文件大小
+        /// </summary>
+        /// <param name="file">ip服务器下的相对路径</param>
+        /// <returns>文件大小</returns>
+        public static int GetFtpFileSize(string ftpUser, string ftpPwd, string fileFullName) {
+            StringBuilder result = new StringBuilder();
+            FtpWebRequest request;
+            try {
+                request = (FtpWebRequest)FtpWebRequest.Create(new Uri(fileFullName));
+                request.UseBinary = true;
+                request.Credentials = new NetworkCredential(ftpUser, ftpPwd);//设置用户名和密码
+                request.Method = WebRequestMethods.Ftp.GetFileSize;
+
+                int dataLength = (int)request.GetResponse().ContentLength;
+
+                return dataLength;
+            } catch (Exception ex) {
+                return -1;
+            }
+        }
+
         public static void WriteLog(string logFullName, string message) {
             WriteLog(logFullName, message, true, true);
         }
