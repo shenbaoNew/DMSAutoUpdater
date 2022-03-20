@@ -14,10 +14,10 @@ namespace DMSAutoUpdater {
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
-            Process instance = RunningInstance();
+            Application.ThreadException += Application_ThreadException;
+            Process instance = RunningInstance(Process.GetCurrentProcess().ProcessName);
             if (instance == null) {
                 CreateTempDirectory();
-                Application.ThreadException += Application_ThreadException;
                 if (args.Length > 0) {
                     UpgradeContext.NewVersion = args[0];
                 } else {
@@ -34,13 +34,15 @@ namespace DMSAutoUpdater {
                     return;
                 }
                 Utils.WriteLog(UpgradeContext.LogFullName, "开始升级...");
+                //尝试删除DMS
+                KillDms();
                 Application.Run(new frmMainForm());
             }
         }
 
-        private static Process RunningInstance() {
+        private static Process RunningInstance(string processName) {
             Process current = Process.GetCurrentProcess();
-            Process[] processes = Process.GetProcessesByName(current.ProcessName);
+            Process[] processes = Process.GetProcessesByName(processName);
             //Loop through the running processes in with the same name 
             foreach (Process process in processes) {
                 //Ignore the current process 
@@ -54,6 +56,14 @@ namespace DMSAutoUpdater {
             }
             //No other instance was found, return null. 
             return null;
+        }
+
+        private static void KillDms() {
+            Process process = RunningInstance("DMS");
+            if (process != null) {
+                Utils.WriteLog(UpgradeContext.LogFullName, "停止DMS...");
+                process.Kill();
+            }
         }
 
         private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e) {
