@@ -33,7 +33,7 @@ namespace DMSAutoUpdater {
                     MessageBox.Show("当前程序已是最新版本，无需更新...");
                     return;
                 }
-                Utils.WriteLog(UpgradeContext.LogFullName, "开始升级...");
+                Utils.WriteLog(UpgradeContext.LogFullName, string.Format("开始升级版本[{0}]...", UpgradeContext.NewVersion));
                 //尝试删除DMS
                 KillDms();
                 Application.Run(new frmMainForm());
@@ -87,7 +87,7 @@ namespace DMSAutoUpdater {
             if (!Directory.Exists(UpgradeContext.TempDirectory)) {
                 Directory.CreateDirectory(UpgradeContext.TempDirectory);
             }
-            UpgradeContext.LogFullName = Path.Combine(UpgradeContext.TempDirectory, "DMS_1.0.1.50.log");
+            UpgradeContext.LogFullName = Path.Combine(Environment.CurrentDirectory, "DMS.log");
         }
 
         public static string NewVersion() {
