@@ -125,7 +125,7 @@ namespace DMSAutoUpdater {
             string desPath = Environment.CurrentDirectory;
 
             Utils.WriteLog(UpgradeContext.LogFullName, "正在更新程序...");
-            Utils.CopyDirectory(sourcePath, desPath, true);
+            Utils.CopyDirectory(sourcePath, desPath, true, new System.Collections.Generic.List<string> { "DMS.log" });
         }
 
         private void BulkConfigFile() {

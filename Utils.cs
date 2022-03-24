@@ -24,7 +24,7 @@ namespace DMSAutoUpdater {
         /// </summary>
         /// <param name="sourcePath"></param>
         /// <param name="targetPath"></param>
-        public static void CopyDirectory(string sourcePath, string targetPath,bool isOverride) {
+        public static void CopyDirectory(string sourcePath, string targetPath,bool isOverride,List<string> exceptFiles) {
             DirectoryInfo sourceDir = new DirectoryInfo(sourcePath);
             DirectoryInfo targetDir = new DirectoryInfo(targetPath);
             if (!targetDir.Exists) {
@@ -33,7 +33,10 @@ namespace DMSAutoUpdater {
             FileInfo[] files = sourceDir.GetFiles();
             foreach (FileInfo file in files) {
                 try {
-                    file.CopyTo(Path.Combine(targetDir.FullName, file.Name), isOverride); //复制目录中所有文件
+                    if (!exceptFiles.Contains(file.Name)) {
+                        //非排除的文件
+                        file.CopyTo(Path.Combine(targetDir.FullName, file.Name), isOverride); //复制目录中所有文件
+                    }
                 } catch (Exception ex) {
                     Console.WriteLine("复制文件出错：" + ex.Message);
                 }
@@ -41,7 +44,7 @@ namespace DMSAutoUpdater {
             DirectoryInfo[] dirs = sourceDir.GetDirectories();
             foreach (DirectoryInfo dir in dirs) {
                 string destinationDir = Path.Combine(targetDir.FullName, dir.Name);
-                CopyDirectory(dir.FullName, destinationDir, isOverride); //复制子目录
+                CopyDirectory(dir.FullName, destinationDir, isOverride, exceptFiles); //复制子目录
             }
         }
 
