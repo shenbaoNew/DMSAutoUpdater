@@ -73,10 +73,8 @@ namespace DMSAutoUpdater {
 
         private static bool CheckNeedUpgrade(string newVersion) {
             try {
-                System.Diagnostics.FileVersionInfo fv = System.Diagnostics.FileVersionInfo.GetVersionInfo("DMS.exe");
-                if (fv.FileVersion.Equals(newVersion)) {
-                    return false;
-                }
+                FileVersionInfo fv = FileVersionInfo.GetVersionInfo("DMS.exe");
+                return newVersion.CompareTo(fv.FileVersion) > 0;
             } catch (Exception ex) {
             }
             return true;
